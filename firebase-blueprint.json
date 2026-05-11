@@ -1,0 +1,112 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and authentication mapping",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["employee", "manager", "hr", "admin"] },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Detailed employee professional information",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "employeeCode": { "type": "string" },
+        "jobTitle": { "type": "string" },
+        "category": { "type": "string", "enum": ["office", "branch"] },
+        "departmentId": { "type": "string" },
+        "branchId": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "on_leave", "terminated"] },
+        "hireDate": { "type": "string", "format": "date" },
+        "baseSalary": { "type": "number" }
+      },
+      "required": ["userId", "employeeCode", "category"]
+    },
+    "EvaluationCriteria": {
+      "title": "Evaluation Criteria",
+      "description": "Weight and category for performance metrics",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "weight": { "type": "number" },
+        "category": { "type": "string", "enum": ["office", "branch"] },
+        "description": { "type": "string" }
+      },
+      "required": ["name", "weight", "category"]
+    },
+    "Evaluation": {
+      "title": "Evaluation",
+      "description": "A single performance evaluation record",
+      "type": "object",
+      "properties": {
+        "employeeId": { "type": "string" },
+        "managerId": { "type": "string" },
+        "period": { "type": "string" },
+        "totalScore": { "type": "number" },
+        "recommendation": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "submitted", "hr_approved"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["employeeId", "totalScore", "status"]
+    },
+    "EvaluationDetail": {
+      "title": "Evaluation Detail",
+      "description": "Specific score for a single criterion",
+      "type": "object",
+      "properties": {
+        "evaluationId": { "type": "string" },
+        "criteriaId": { "type": "string" },
+        "score": { "type": "number" },
+        "weightAtTime": { "type": "number" },
+        "comment": { "type": "string" }
+      }
+    },
+    "Achievement": {
+      "title": "Achievement",
+      "description": "Record of employee accomplishments",
+      "type": "object",
+      "properties": {
+        "employeeId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "approvedBy": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] }
+      }
+    },
+    "Promotion": {
+      "title": "Promotion",
+      "description": "History of employee promotions",
+      "type": "object",
+      "properties": {
+        "employeeId": { "type": "string" },
+        "previousTitle": { "type": "string" },
+        "newTitle": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "approvedBy": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/employees/{employeeId}": { "schema": "Employee", "description": "Employee profiles" },
+    "/criteria/{criteriaId}": { "schema": "EvaluationCriteria", "description": "Global criteria definitions" },
+    "/evaluations/{evaluationId}": { "schema": "Evaluation", "description": "Performance evaluations" },
+    "/evaluations/{evaluationId}/details/{detailId}": { "schema": "EvaluationDetail", "description": "Detailed scores for an evaluation" },
+    "/achievements/{achievementId}": { "schema": "Achievement", "description": "Employee accomplishments" },
+    "/promotions/{promotionId}": { "schema": "Promotion", "description": "Promotion logs" },
+    "/departments/{deptId}": { "schema": { "type": "object" }, "description": "Company departments" },
+    "/branches/{branchId}": { "schema": { "type": "object" }, "description": "Company branches" }
+  }
+}
